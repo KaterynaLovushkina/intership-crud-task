@@ -1,0 +1,79 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+	Comments list
+{% endblock %}
+
+{% block stylesheets %}
+	<link rel="stylesheet" href="{{ asset('css/styles.css') }}">
+{% endblock %}
+
+{% block body %}
+	<div class="container">
+		<div class="row">
+			<div class="text-center">
+				<h3 class="bg-light py-4 text-info">
+					<i class="fa-sharp fa-solid fa-earth-americas"></i>
+					Comments list
+				</h3>
+				{% for message in app.flashes('notice') %}
+					<div class="alert alert-success">
+						{{ message }}
+					</div>
+				{% endfor %}
+			</div>
+			<div class="d-flex justify-content-center mb-3">
+				<form action="{{ path('create') }}" method="POST">
+					{{ form_start(form) }}
+					<div class="form-group">
+						{{ form_label(form.title) }}
+						{{ form_widget(form.title) }}
+						{{ form_errors(form.title, {'attr': {'class': 'invalid-feedback'}}) }}
+					</div>
+					<div class="form-group">
+						{{ form_label(form.description) }}
+						{{ form_widget(form.description) }}
+						{{ form_errors(form.description, {'attr': {'class': 'text-danger'}}) }}
+					</div>
+					<div class="form-group">
+						<button class="btn btn-success mr-2 js-btn-form" id="btn-create" type="submit">Create</button>
+					</div>
+					{{ form_rest(form) }}
+					{{ form_end(form) }}
+				</form>
+			</div>
+		</div>
+		<div class="container d-flex flex-column align-items-center">
+			<div class="container d-flex justify-content-center w-50 mb-4">
+				<table id="table" class="table table-striped">
+					<thead>
+						<tr>
+							<th data-colname="id" scope="col">ID</th>
+							<th data-type="string" data-colname="country" scope="col">Title</th>
+							<th data-type="number" data-colname="duration" scope="col">Description</th>
+							<th data-colname="actions" scope="col">Actions</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for comment in list %}
+							<tr>
+								<td>{{ comment.id }}</td>
+								<td>{{ comment.title }}</td>
+								<td>{{ comment.description }}</td>
+								<td>
+									<a class="js-delete-btn text-danger" href="{{ path('delete', {'id': comment.id}) }}">
+										<i class="fa-solid fa-trash"></i>
+									</a>
+								</td>
+							</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+			<div class="pagination">
+				{{ knp_pagination_render(list) }}
+			</div>
+		</div>
+		<script src="{{ asset('js/main.js') }}"></script>
+	</div>
+{% endblock %}
